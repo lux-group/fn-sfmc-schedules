@@ -10,6 +10,12 @@ Ensure that you have version 2 of the aws cli client installed, if not install h
 
 Ensure that you have the correct aws creds set up and your aws2 cli tool is working
 
+## Configuration
+
+To set the configuration at function creation time alter the config.json file
+
+To alter the configuration once the function is running alter the update.json file
+
 ## Deployment
 
 To update the function run: 
@@ -33,4 +39,9 @@ To deploy the function for the first time run:
 ```
 $ bash createFunction.bash
 ```
+
+# Rollback
+
+To rollback to a older version of the code revert the to that version within github, then run the update function command.
+
 
