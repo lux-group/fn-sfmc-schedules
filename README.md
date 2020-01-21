@@ -18,23 +18,14 @@ To alter the configuration once the function is running alter the update.json fi
 
 ## Deployment
 
-To update the function run: 
-run:
+###To update the function run: 
 ```
 $ bash updateFunction.bash
 ```
 
-This will update the code being executed by the lambda function.
+This will update the configuration and the code being executed by the lambda function.
 
-In order to do this the script will:
-
-1. Zip the src dir into a zip file
-2. Base64 encode the given zip file
-3. Update the config.json file with the given base64 value
-4. Use this updated json file to update the function
-
-
-To deploy the function for the first time run: 
+###To deploy the function for the first time run: 
 
 ```
 $ bash createFunction.bash
@@ -44,4 +35,8 @@ $ bash createFunction.bash
 
 To rollback to a older version of the code revert the to that version within github, then run the update function command.
 
+# Delete function
 
+```
+$ aws2 lambda delete-function --function-name fn-sfmc-schedules
+```
