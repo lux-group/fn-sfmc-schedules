@@ -41,6 +41,14 @@ To rollback to a older version of the code revert the to that version within git
 $ aws2 lambda delete-function --function-name fn-sfmc-schedules
 ```
 
+# Invoke Function
+
+To invoke the function and get the output of that function into a file called testing.txt run:
+
+```
+$ aws2 lambda invoke --function-name fn-sfmc-schedules --log-type Tail testing.txt
+```
+
 # Debugging
 
 ```
