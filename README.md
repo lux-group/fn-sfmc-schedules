@@ -18,14 +18,14 @@ To alter the configuration once the function is running alter the update.json fi
 
 ## Deployment
 
-###To update the function run: 
+### To update the function run: 
 ```
 $ bash updateFunction.bash
 ```
 
 This will update the configuration and the code being executed by the lambda function.
 
-###To deploy the function for the first time run: 
+### To deploy the function for the first time run: 
 
 ```
 $ bash createFunction.bash
