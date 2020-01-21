@@ -4,7 +4,7 @@
     "Role": "arn:aws:iam::801230920622:role/svc-interaction-studio-production-function",
     "Handler": "index.handler",
     "Code": {
-        "ZipFile": "UEsDBBQAAAAIAMNJNVBZOzFngAAAAKsAAAAIAAAAaW5kZXguanNdjUEKwjAQRfdzir9LA6ELl0o9gIgFPUFIpjUQJtCkxSLe3SiK4PLzH++5JDlFbmMaG3VM1gcZMcziSkii9I7IVaLgasVHntDB5lUcGl5YikF9C9+KRrfHnfDaP9+ZHYeFPd7wVhkcLv2pzWWqlTCsX4nMMRpsdM09iD6p/wI9AVBLAwQUAAAACADDSTVQWTsxZ4AAAACrAAAADAAAAHNyYy9pbmRleC5qc12NQQrCMBBF93OKv0sDoQuXSj2AiAU9QUimNRAm0KTFIt7dKIrg8vMf77kkOUVuYxobdUzWBxkxzOJKSKL0jshVouBqxUee0MHmVRwaXliKQX0L34pGt8ed8No/35kdh4U93vBWGRwu/anNZaqVMKxficwxGmx0zT2IPqn/Aj0BUEsBAh4DFAAAAAgAw0k1UFk7MWeAAAAAqwAAAAgAAAAAAAAAAQAAAKSBAAAAAGluZGV4LmpzUEsBAh4DFAAAAAgAw0k1UFk7MWeAAAAAqwAAAAwAAAAAAAAAAQAAAKSBpgAAAHNyYy9pbmRleC5qc1BLBQYAAAAAAgACAHAAAABQAQAAAAA="
+        "ZipFile": "base64EncodedFile"
     },
     "Description": "A function to sync offer schedules to sfmc",
     "Timeout": 3,

@@ -12,10 +12,25 @@ Ensure that you have the correct aws creds set up and your aws2 cli tool is work
 
 ## Deployment
 
+To update the function run: 
 run:
 ```
-$ bash packageCodeAndDeploy.sh
+$ bash updateFunction.bash
 ```
 
-This command will zip the code found within the src dir and then deply that code using the configuration
-found within config.json
+This will update the code being executed by the lambda function.
+
+In order to do this the script will:
+
+1. Zip the src dir into a zip file
+2. Base64 encode the given zip file
+3. Update the config.json file with the given base64 value
+4. Use this updated json file to update the function
+
+
+To deploy the function for the first time run: 
+
+```
+$ bash createFunction.bash
+```
+
