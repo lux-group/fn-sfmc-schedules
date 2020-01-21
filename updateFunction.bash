@@ -7,7 +7,7 @@ rm update_config.json
 
 
 echo "updating function code"
-zip -r -X "fn-sfmc-schedules.zip" src/*
+cd src; zip -r -X "../fn-sfmc-schedules.zip" *; cd ..
 base64EncodedFile=$(base64 fn-sfmc-schedules.zip)
 sed 's:base64EncodedFile:'${base64EncodedFile}':' update.json > deployment.json
 aws2 lambda update-function-code --cli-input-json file://deployment.json

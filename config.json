@@ -2,7 +2,7 @@
     "FunctionName": "fn-sfmc-schedules",
     "Runtime": "nodejs12.x",
     "Role": "arn:aws:iam::801230920622:role/svc-interaction-studio-production-function",
-    "Handler": "src.index.handler",
+    "Handler": "index.handler",
     "Code": { "ZipFile": "base64EncodedFile" },
     "Description": "A function to sync offer schedules to sfmc",
     "Timeout": 3,
