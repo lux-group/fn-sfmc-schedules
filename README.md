@@ -55,6 +55,12 @@ Then to view the output
 $ cat testing.txt
 ```
 
+Or if you love json query this can be done in one step
+
+```
+$ aws2 lambda invoke --function-name fn-sfmc-schedules --log-type Tail /dev/null | jq -r '.LogResult' | base64 --decode
+```
+
 # Debugging
 
 ```
