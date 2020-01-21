@@ -49,6 +49,12 @@ To invoke the function and get the output of that function into a file called te
 $ aws2 lambda invoke --function-name fn-sfmc-schedules --log-type Tail testing.txt
 ```
 
+Then to view the output
+
+```
+$ cat testing.txt
+```
+
 # Debugging
 
 ```
