@@ -40,3 +40,18 @@ To rollback to a older version of the code revert the to that version within git
 ```
 $ aws2 lambda delete-function --function-name fn-sfmc-schedules
 ```
+
+# Debugging
+
+```
+$ aws2 logs tail /aws/lambda/fn-sfmc-schedules --follow
+```
+
+This will tail the aws cloudwatch log group for this function.
+log groups are automatically made for each lambda function and follow this syntax /aws/lambda/${function-name}
+
+To gain better understanding of logging run:
+
+```
+# aws2 logs help
+```
