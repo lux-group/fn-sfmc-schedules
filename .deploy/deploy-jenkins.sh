@@ -34,16 +34,12 @@ UPDATE=true
 aws2 lambda get-function --function-name ${FUNCTION_NAME} > /dev/null 2>&1 || UPDATE=false
 
 if [ "$UPDATE" = true ] ; then
-  echo 'Updating the lambda'
+  echo "Deploying to ${ENVIRONMENT}"
   ./.deploy/update-function.sh
 else
-  echo 'Creating the lambda'
+  echo "Deploying to ${ENVIRONMENT} for the first time"
   ./.deploy/create-function.sh
 fi
-
-echo "Deploying to ${ENVIRONMENT}"
-
-echo "Colin to replace" || { echo 'deploy failed' ; exit 1; }
 
 echo "Deployed"
 
