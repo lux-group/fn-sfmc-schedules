@@ -1,0 +1,12 @@
+{
+  "name": "fn-sfmc-schedules",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:brandsExclusive/fn-sfmc-schedules.git",
+  "author": "Colin Pringlewood",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "echo \"build\""
+  }
+}

@@ -20,7 +20,7 @@ To alter the configuration once the function is running alter the update.json fi
 
 ### To update the function run: 
 ```
-$ bash updateFunction.bash
+$ ./deploy/update-function.sh
 ```
 
 This will update the configuration and the code being executed by the lambda function.
@@ -28,7 +28,7 @@ This will update the configuration and the code being executed by the lambda fun
 ### To deploy the function for the first time run: 
 
 ```
-$ bash createFunction.bash
+$ ./deploy/create-function.sh
 ```
 
 # Rollback
