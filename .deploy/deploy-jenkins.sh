@@ -10,6 +10,10 @@ yarn build
 CURRENT_DIR="`dirname \"$0\"`"
 CURRENT_DIR="`( cd \"$CURRENT_DIR\" && pwd )`"
 ROOT_DIR=$CURRENT_DIR/..
+WORKING_DIR=$ROOT_DIR/.deploy/tmp
+
+rm -rf $WORKING_DIR
+mkdir $WORKING_DIR
 
 ENVIRONMENT=$1
 
@@ -27,7 +31,7 @@ if [ ! -f ${CONFIG_FILE} ]; then echo "DEPLOYMENT_FAILURE: No config file found 
 
 node .deploy/check-e2es.js ${CONFIG_FILE} ${ENVIRONMENT} ${CIRCLE_TOKEN} || exit 1;
 
-node .deploy/generate-fn-config.js ${CONFIG_FILE} > ${ROOT_DIR}/config.json || { echo 'could not generate config' ; exit 1; };
+node .deploy/generate-fn-config.js ${CONFIG_FILE} > ${WORKING_DIR}/config.json || { echo 'could not generate config' ; exit 1; };
 
 UPDATE=true
 
@@ -35,10 +39,21 @@ aws2 lambda get-function --function-name ${FUNCTION_NAME} > /dev/null 2>&1 || UP
 
 if [ "$UPDATE" = true ] ; then
   echo "Deploying to ${ENVIRONMENT}"
-  ./.deploy/update-function.sh
+
+  sed '/$*base64EncodedFile/d; /$*Tags/d; /$*Publish/d' ${WORKING_DIR}/config.json > ${WORKING_DIR}/update.json
+  aws2 lambda update-function-configuration --cli-input-json file://${WORKING_DIR}/update.json
+
+  zip -r -X ${WORKING_DIR}/lambda.zip ${ROOT_DIR}/src/*
+  base64EncodedFile=`base64 -w 0 ${WORKING_DIR}/lambda.zip`
+  cat ${WORKING_DIR}/config.json | sed s:base64EncodedFile:${base64EncodedFile}:g > ${WORKING_DIR}/deployment.json
+  aws2 lambda update-function --cli-input-json file://${WORKING_DIR}/deployment.json
 else
   echo "Deploying to ${ENVIRONMENT} for the first time"
-  ./.deploy/create-function.sh
+
+  zip -r -X ${WORKING_DIR}/lambda.zip ${ROOT_DIR}/src/*
+  base64EncodedFile=`base64 -w 0 ${WORKING_DIR}/lambda.zip`
+  cat ${WORKING_DIR}/config.json | sed s:base64EncodedFile:${base64EncodedFile}:g > ${WORKING_DIR}/deployment.json
+  aws2 lambda create-function --cli-input-json file://${WORKING_DIR}/deployment.json
 fi
 
 echo "Deployed"
