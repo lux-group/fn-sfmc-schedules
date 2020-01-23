@@ -3,13 +3,9 @@
   "Runtime": "nodejs12.x",
   "Role": "arn:aws:iam::801230920622:role/svc-interaction-studio-production-function",
   "Handler": "index.handler",
-  "Code": {
-    "ZipFile": "base64EncodedFile"
-  },
   "Description": "A function to sync offer schedules to sfmc",
   "Timeout": 3,
   "MemorySize": 128,
-  "Publish": true,
   "VpcConfig": {
     "SubnetIds": [
       "subnet-8e1b47f8",
@@ -28,8 +24,5 @@
   "KMSKeyArn": "",
   "Tags": {
     "KeyName": ""
-  },
-  "TracingConfig": {
-    "Mode": "PassThrough"
   }
 }

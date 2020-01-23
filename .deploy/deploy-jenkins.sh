@@ -23,7 +23,7 @@ if [ ! ${ENVIRONMENT} ]; then echo "Must supply an environment as the first argu
 
 CONFIG_FILE="${ROOT_DIR}/deploy/${ENVIRONMENT}-fn.json"
 
-FUNCTION_NAME=`node .deploy/generate-fn-name ${CONFIG_FILE}`
+FUNCTION_NAME=`node .deploy/get-function-name.js ${CONFIG_FILE}`
 
 echo "Config File: ${CONFIG_FILE}"
 
@@ -31,31 +31,38 @@ if [ ! -f ${CONFIG_FILE} ]; then echo "DEPLOYMENT_FAILURE: No config file found 
 
 node .deploy/check-e2es.js ${CONFIG_FILE} ${ENVIRONMENT} ${CIRCLE_TOKEN} || exit 1;
 
-node .deploy/generate-fn-config.js ${CONFIG_FILE} > ${WORKING_DIR}/config.json || { echo 'could not generate config' ; exit 1; };
+echo "generating config files ....."
+node .deploy/create-function.js ${CONFIG_FILE} > ${WORKING_DIR}/create-function.json \
+  || { echo 'could not generate create function json' ; exit 1; };
+node .deploy/update-function-code.js ${CONFIG_FILE} > ${WORKING_DIR}/update-function-code.json \
+  || { echo 'could not generate update function code json' ; exit 1; };
+node .deploy/update-function-configuration.js ${CONFIG_FILE} > ${WORKING_DIR}/update-function-configuration.json \
+  || { echo 'could not generate update function configuration json' ; exit 1; };
 
-UPDATE=true
+echo "generating zip file ....."
+cd ${ROOT_DIR}/src
+zip -r -X ${WORKING_DIR}/lambda.zip * > /dev/null
+base64EncodedFile=`base64 -w 0 ${WORKING_DIR}/lambda.zip`
 
-aws2 lambda get-function --function-name ${FUNCTION_NAME} > /dev/null 2>&1 || UPDATE=false
+echo "determine action ....."
+ACTION="update"
+aws2 lambda get-function --function-name ${FUNCTION_NAME} > /dev/null 2>&1 || ACTION="create"
+echo "action is ${ACTION}."
 
-if [ "$UPDATE" = true ] ; then
-  echo "Deploying to ${ENVIRONMENT}"
+cat ${WORKING_DIR}/create-function.json | sed s:base64EncodedFile:${base64EncodedFile}:g > ${WORKING_DIR}/create-deployment.json
+cat ${WORKING_DIR}/update-function-code.json | sed s:base64EncodedFile:${base64EncodedFile}:g > ${WORKING_DIR}/update-deployment.json
 
-  sed '/$*base64EncodedFile/d; /$*Tags/d; /$*Publish/d' ${WORKING_DIR}/config.json > ${WORKING_DIR}/update.json
-  aws2 lambda update-function-configuration --cli-input-json file://${WORKING_DIR}/update.json
+echo "deploying to ${ENVIRONMENT}"
 
-  zip -r -X ${WORKING_DIR}/lambda.zip ${ROOT_DIR}/src/*
-  base64EncodedFile=`base64 -w 0 ${WORKING_DIR}/lambda.zip`
-  cat ${WORKING_DIR}/config.json | sed s:base64EncodedFile:${base64EncodedFile}:g > ${WORKING_DIR}/deployment.json
-  aws2 lambda update-function --cli-input-json file://${WORKING_DIR}/deployment.json
-else
-  echo "Deploying to ${ENVIRONMENT} for the first time"
-
-  zip -r -X ${WORKING_DIR}/lambda.zip ${ROOT_DIR}/src/*
-  base64EncodedFile=`base64 -w 0 ${WORKING_DIR}/lambda.zip`
-  cat ${WORKING_DIR}/config.json | sed s:base64EncodedFile:${base64EncodedFile}:g > ${WORKING_DIR}/deployment.json
-  aws2 lambda create-function --cli-input-json file://${WORKING_DIR}/deployment.json
+if [ "$ACTION" = "update" ] ; then
+  aws2 lambda update-function-configuration --cli-input-json file://${WORKING_DIR}/update-function-configuration.json > /dev/null
+  aws2 lambda update-function-code --cli-input-json file://${WORKING_DIR}/update-deployment.json > /dev/null
 fi
 
-echo "Deployed"
+if [ "$ACTION" = "create" ] ; then
+  aws2 lambda create-function --cli-input-json file://${WORKING_DIR}/create-deployment.json
+fi
+
+echo "done."
 
 exit 0;
