@@ -18,17 +18,16 @@ To alter the configuration once the function is running alter the update.json fi
 
 ## Deployment
 
-### To update the function run: 
-```
-$ ./deploy/update-function.sh
-```
-
-This will update the configuration and the code being executed by the lambda function.
-
-### To deploy the function for the first time run: 
+### Test
 
 ```
-$ ./deploy/create-function.sh
+$ FN_MY_VAR=xxx ./.deploy/deploy-jenkins.sh test
+```
+
+### Production
+
+```
+$ FN_MY_VAR=xxx ./.deploy/deploy-jenkins.sh production
 ```
 
 # Rollback
